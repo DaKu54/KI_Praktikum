@@ -87,27 +87,28 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+    
     startState = problem.getStartState()
-    #depth first uses stack
+    #Because of LIFO = Stack
     fringe = util.Stack()
     visited = []
 
-    #the fringe should consist the state, a list containing the actions executed
-    #to reach the state, and cost (cost in dfs & bfs doesnt matter)
-    #format same as that obtained from the defined function
+    #Visited places are saved in the fringe, 0 is for the costs which is not necessary
     fringe.push((startState, [], 0))
 
-    #keep popping till no more nodes in the fringe
+    #runs till there are no more unvisited places
     while not fringe.isEmpty():
+        #first three elements are taken from the fringe to follow the dfs principle
+        #which is to go to the deepest node
         currentState, actions, costs = fringe.pop()
         #curcial as this prevents expanding the same node twice
         if not currentState in visited:
-            #update visited status
+            #add visited to list
             visited.append(currentState)
-            #if this goal state return the actions to reach it
+            #is current state a goal state
             if problem.isGoalState(currentState):
                 return actions
-            #push all successors not in visited
+            #check if the successor is in visited, if not --> fringe
             for state, action, cost in problem.getSuccessors(currentState):
                 if not state in visited:
                     fringe.push((state, actions + [action], cost))
@@ -118,26 +119,24 @@ def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     startState = problem.getStartState()
-    #breadth first uses queue
+    #BFS = FIFO --> Queue
     fringe = util.Queue()
     visited = []
 
-    #the fringe should consist the state, a list containing the actions executed
-    #to reach the state, and cost (cost in dfs & bfs doesnt matter)
-    #format same as that obtained from the defined function
+    #Visited places are saved in the fringe, 0 is for the costs which is not necessary
     fringe.push((startState, [], 0))
 
-    #keep popping till no more nodes in the fringe
+    #runs till there are no more unvisited places
     while not fringe.isEmpty():
         currentState, actions, costs = fringe.pop()
         #curcial as this prevents expanding the same node twice
         if not currentState in visited:
-            #update visited status
+            #add visited to list
             visited.append(currentState)
-            #if this goal state return the actions to reach it
+            #is current state a goal state
             if problem.isGoalState(currentState):
                 return actions
-            #push all successors not in visited
+            #check if the successor is in visited, if not --> fringe
             for state, action, cost in problem.getSuccessors(currentState):
                 if not state in visited:
                     fringe.push((state, actions + [action], cost))
@@ -148,33 +147,30 @@ def uniformCostSearch(problem: SearchProblem):
     "*** YOUR CODE HERE ***"
 
     startState = problem.getStartState()
-    #ucs using priority queue so as to prioriize the successors with least cost
+    #Fringe is a priority queue
     fringe = util.PriorityQueue()
     visited = []
 
-    #the fringe apart from the state , action, cost also has priority 0 here
-    #which is same as the cost as we want the least total cost first
+    #Visited places are saved in the fringe, last parameter is for the priority
     fringe.push((startState, [], 0), 0 )
 
-    #keep popping till no more nodes in the fringe
+    #runs till there are no more unvisited places
     while not fringe.isEmpty():
         currentState, actions, costs = fringe.pop()
         #curcial as this prevents expanding the same node twice
         if not currentState in visited:
             #update visited status
             visited.append(currentState)
-            #if this goal state return the actions to reach it
+            #is current state a goal state
             if problem.isGoalState(currentState):
                 return actions
-            #push all successors not in visited
+            #check if the successor is in visited, if not --> fringe
             for state, action, cost in problem.getSuccessors(currentState):
                 if not state in visited:
                     #update cost to reflect total cost and prioritize the least
                     #as the priority queue is implemeneted using heapq which pops
                     #smallest element first and pushes such to maintain this order
                     fringe.push((state, actions + [action], costs + cost), costs + cost)
-    util.raiseNotDefined()
-
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
